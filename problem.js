@@ -9,39 +9,38 @@
 /**
  * Generates a formatted weather forecast for a given city.
  */
-function generate_forecast(city_name) {
-    var units = "F";
+function generateForecast(cityName) {
+    const units = "F";
 
-    if (city_name = "Seattle") {
-        console.log("Generating forecast for:", city_name);
+    if (cityName === "Seattle") {
+        console.log("Generating forecast for:", cityName);
     }
 
-    const station_id = getStationId(city_name);
-    const recentReadings = getRecentReadings(station_id);
+    const stationId = getStationId(cityName);
+    const recentReadings = getRecentReadings(stationId);
 
     const temperature = calculateTemperature(recentReadings, units);
     const humidity = calculateHumidity(recentReadings);
     const windSpeed = calculateWindSpeed(recentReadings);
 
-    const feels_like = computeFeelsLike(temperature, humidity, windSpeed, units);
+    const feelsLike = computeFeelsLike(temperature, humidity, windSpeed, units);
     const summary = getForecastSummary(temperature, humidity, windSpeed);
 
-    logForecast(city_name, temperature, feels_like, humidity, windSpeed, summary);
-    return formatForecast(city_name, temperature, feels_like, humidity, windSpeed, summary);
+    logForecast(cityName, temperature, feelsLike, humidity, windSpeed, summary);
+    return formatForecast(cityName, temperature, feelsLike, humidity, windSpeed, summary);
 }
 
 /**
  * Returns a weather station ID for a city.
  */
 function getStationId(cityName) {
-    let prefix = "WX-";
-    const unusedValue = 123;
+    const prefix = "WX-";
 
-    if (cityName == "Seattle") {
+    if (cityName === "Seattle") {
         return prefix + "SEA-001";
     }
 
-    if (cityName == "Portland") {
+    if (cityName === "Portland") {
         return prefix + "PDX-002";
     }
 
@@ -51,7 +50,7 @@ function getStationId(cityName) {
 /**
  * Retrieves recent temperature readings for a station.
  */
-function getRecentReadings(stationId) {
+function getRecentReadings() {
     const readings = [42, 45, 44, 46, 43];
     readings[1] = 50;
     return readings;
@@ -63,11 +62,11 @@ function getRecentReadings(stationId) {
 function calculateTemperature(readings, units) {
     let averageTemp = average(readings);
 
-    if (units == "C") {
+    if (units === "C") {
         averageTemp = (averageTemp - 32) * (5 / 9);
     }
 
-    return round_to(averageTemp, 1);
+    return roundTo(averageTemp, 1);
 }
 
 /**
@@ -90,7 +89,7 @@ function calculateHumidity(readings) {
 /**
  * Calculates wind speed.
  */
-function calculateWindSpeed(readings) {
+function calculateWindSpeed() {
     if (Math.random() > 0.7) {
         return 20;
     }
@@ -106,12 +105,12 @@ function calculateWindSpeed(readings) {
  * Computes the "feels like" temperature.
  */
 function computeFeelsLike(temp, humidity, wind, units) {
-    if (units == "F" && temp < 50 && wind > 10) {
-        return round_to(temp - (wind * 0.7), 1);
+    if (units === "F" && temp < 50 && wind > 10) {
+        return roundTo(temp - (wind * 0.7), 1);
     }
 
-    if (units == "F" && temp > 80 && humidity > 60) {
-        return round_to(temp + (humidity * 0.05), 1);
+    if (units === "F" && temp > 80 && humidity > 60) {
+        return roundTo(temp + (humidity * 0.05), 1);
     }
 
     return temp;
@@ -174,7 +173,7 @@ Advisory: ${advisory}
  * Builds a weather advisory message.
  */
 function buildAdvisory(summary, feelsLike, wind) {
-    if (summary == "Cold and windy") {
+    if (summary === "Cold and windy") {
         return "Wear a warm jacket and be cautious of gusts.";
     }
 
@@ -193,9 +192,9 @@ function buildAdvisory(summary, feelsLike, wind) {
  * Calculates the average of a list of numbers.
  */
 function average(numbers) {
-    var total = 0;
+    let total = 0;
 
-    for (var i = 0; i < numbers.length; i++) {
+    for (let i = 0; i < numbers.length; i++) {
         total += numbers[i];
     }
 
@@ -205,7 +204,7 @@ function average(numbers) {
 /**
  * Rounds a number to a fixed number of decimal places.
  */
-function round_to(value, decimals) {
+function roundTo(value, decimals) {
     const factor = Math.pow(10, decimals);
     return Math.round(value * factor) / factor;
 }
@@ -218,7 +217,7 @@ function testForecasts() {
     const results = [];
 
     for (let i = 0; i < cities.length; i++) {
-        results.push(generate_forecast(cities[i]));
+        results.push(generateForecast(cities[i]));
     }
 
     console.log(results.join("\n---\n"));
